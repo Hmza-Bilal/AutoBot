@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      
+
   schedule:
     - cron: "0 7,9,11 * * 0,1,3,5,6" # Runs at 7, 9, 11 AM on Sun, Mon, Wed, Fri, Sat
 
@@ -45,8 +45,14 @@ jobs:
           rand=$[$RANDOM % ${#arr[@]}]
           git commit -m "${arr[$rand]}" || echo "No changes to commit"
 
-      - name: Pull latest changes before pushing
-        run: git pull origin master --rebase
+      - name: Pull latest changes with rebase and conflict resolution
+        run: |
+          git pull origin master --rebase || {
+            echo "Rebase failed. Resolving conflict in LAST_UPDATED..."
+            git checkout --ours LAST_UPDATED
+            git add LAST_UPDATED
+            git rebase --continue
+          }
 
       - name: GitHub Push
         uses: ad-m/github-push-action@v0.6.0
