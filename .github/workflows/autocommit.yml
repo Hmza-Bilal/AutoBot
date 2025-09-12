@@ -6,7 +6,7 @@ on:
       - master
 
   schedule:
-    - cron: "0 7,9,11 * * 0,1,3,5,6" # 7, 9, 11 AM on Sun, Mon, Wed, Fri, Sat
+    - cron: "0 */4 * * *" # Runs every 4 hours
 
 jobs:
   auto_commit:
@@ -22,7 +22,10 @@ jobs:
 
       - name: Modify README
         run: |
-          echo "this is a commit $(date '+%Y-%m-%d %H:%M:%S')" >> README.md
+          # Emoji array
+          emojis=("😂" "😱" "👿" "💩" "🙏" "🙈" "🐐" "🤖" "🟩" "👻")
+          rand=$[$RANDOM % ${#emojis[@]}]
+          echo "${emojis[$rand]} this is a commit $(date '+%Y-%m-%d %H:%M:%S')" >> README.md
 
       - name: Commit changes
         run: |
