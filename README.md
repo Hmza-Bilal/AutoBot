@@ -1,1 +1,1 @@
-AutoBot to Auto oOmmit using CronJob 
+AutoBot to Auto Commit using CronJob 
